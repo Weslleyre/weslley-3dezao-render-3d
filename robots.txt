@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://weslleyre.github.io/weslley-3dezao-render-3d/sitemap.xml
