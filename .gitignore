@@ -1,0 +1,26 @@
+# Arquivos locais do sistema e editores
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.log
+
+# Credenciais e configurações privadas
+.env
+.env.*
+!.env.example
+
+# Desenvolvimento, backups e evidências (fora do site público)
+node_modules/
+__pycache__/
+*.pyc
+work/
+outputs/
+round2-*
+*.bak
+*.backup
+screenshots/
+evidencias/
