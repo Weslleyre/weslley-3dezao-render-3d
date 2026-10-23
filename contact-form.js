@@ -17,7 +17,7 @@
     if (sending || !form.reportValidity()) return;
     const payload = Object.fromEntries(new FormData(form));
     // Do not submit a filled spam trap or report a false success.
-    if (payload._honey) {
+    if (payload._gotcha) {
       show('error', 'Não foi possível enviar. Entre em contato pelo WhatsApp ou e-mail ao lado.');
       return;
     }
@@ -35,13 +35,13 @@
         body: JSON.stringify(payload),
         signal: controller.signal
       });
-      const result = await response.json();
-      const needsActivation = /activat|confirm.*email|verify.*email/i.test(String(result.message || ''));
-      if (needsActivation) {
-        show('error', 'O formulário aguarda ativação pelo estúdio. Entre em contato pelo WhatsApp ou e-mail ao lado.');
-      } else if (response.ok && (result.success === true || result.success === 'true')) {
-        // Only the service's explicit positive response can enter this state.
+      // HTTP status is authoritative; a successful body may be empty or non-JSON.
+      if (response.ok) {
         show('success', 'Solicitação enviada com sucesso. Em breve entraremos em contato.');
+      } else if (response.status === 429) {
+        show('error', 'Muitas solicitações em pouco tempo. Aguarde alguns minutos antes de tentar novamente.');
+      } else if (response.status === 400 || response.status === 422) {
+        show('error', 'Não foi possível validar sua solicitação. Confira os campos e tente novamente ou use o WhatsApp ou e-mail ao lado.');
       } else {
         show('error', 'Não foi possível enviar sua solicitação. Tente novamente ou use o WhatsApp ou e-mail ao lado.');
       }

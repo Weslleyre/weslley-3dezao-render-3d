@@ -189,3 +189,10 @@
 .footer-message{grid-area:1/1;align-self:center;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility .55s;pointer-events:none}
 .footer-message.is-active{opacity:1;visibility:visible;pointer-events:auto}
 .footer-copyright{margin-top:24px;margin-bottom:0;font-size:12px;line-height:1.9;color:inherit;opacity:.75}
+
+/* Process steps reuse the existing service tooltip interaction. */
+.process-tip-trigger{display:block;width:100%;max-width:150px;height:150px;margin:0 auto 16px;padding:0;border:0;background:transparent;cursor:pointer}
+.process-tip-trigger .process-icon{margin:0;height:100%}
+.process-tip-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:5px;border-radius:5px}
+.process-tooltip{max-height:calc(100dvh - 24px)}
+@media(max-height:480px){.process-tooltip{overflow-y:auto}}

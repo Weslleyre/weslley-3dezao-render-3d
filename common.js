@@ -13,13 +13,15 @@ document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().g
     const left = Math.max(12, Math.min(innerWidth-w-12,r.left+r.width/2-w/2));
     const above = r.top > h+20;
     tip.style.left = `${left}px`;
-    tip.style.top = `${above?r.top-h-12:Math.min(innerHeight-h-12,r.bottom+12)}px`;
+    const top = above?r.top-h-12:Math.min(innerHeight-h-12,r.bottom+12);
+    tip.style.top = `${tip.classList.contains('process-tooltip')?Math.max(12,Math.min(innerHeight-h-12,top)):top}px`;
     tip.dataset.side = above?'above':'below';
     tip.style.setProperty('--tip-arrow',`${Math.max(18,Math.min(w-18,r.left+r.width/2-left))}px`);
   }
   document.querySelectorAll('[data-service-tip]').forEach((button,i) => {
     const tip = document.createElement('span');
     tip.id = `service-tip-${i}`; tip.className = 'service-tooltip'; tip.setAttribute('role','tooltip');
+    if (button.classList.contains('process-tip-trigger')) tip.classList.add('process-tooltip');
     tip.textContent = button.dataset.serviceTip; tip.hidden = true;
     document.body.append(tip); button.setAttribute('aria-describedby',tip.id);
     const show = () => {clearTimeout(timer);if(active!==button) close();active=button;tip.hidden=false;position();};
@@ -34,5 +36,8 @@ document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().g
   });
   document.addEventListener('pointerdown',e=>{if(active&&!active.contains(e.target)&&!e.target.closest('.service-tooltip'))close();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-  addEventListener('resize',position); addEventListener('scroll',close,{passive:true});
+  addEventListener('resize',position); addEventListener('scroll',()=>{
+    if(active?.classList.contains('process-tip-trigger')&&(document.activeElement===active||active.matches(':hover')))position();
+    else close();
+  },{passive:true});
 })();
